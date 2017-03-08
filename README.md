@@ -1,11 +1,11 @@
 # Space-Shooter
-The "Space Shooter" tutorial on the Unity Tutorials site
+The "Space Shooter" tutorial on the Unity Tutorials site converted to mobile
 
 #Installation
 
 Clone the GitHub repository
 
-`$ git clone https://github.com/fiixed/Space-Shooter.git`
+`$ git clone https://github.com/fiixed/Space-Shooter-Mobile.git`
 
 Open the project in Unity 5.5.1 or later
 
