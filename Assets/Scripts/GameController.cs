@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
@@ -9,7 +10,8 @@ public class GameController : MonoBehaviour {
     public Vector3 spawnValues;
     public int hazardCount;
     public float spawnWait, startWait, waveWait;
-    public GUIText scoreText, restartText, gameOverText;
+    public Text scoreText, gameOverText;
+    public GameObject restartButton;
 
     private int score;
     private bool gameOver;
@@ -18,20 +20,20 @@ public class GameController : MonoBehaviour {
     private void Start() {
         gameOver = false;
         restart = false;
-        restartText.text = "";
+        restartButton.SetActive(false);
         gameOverText.text = "";
         score = 0;
         UpdateScore();
         StartCoroutine(SpawnWaves());
     }
 
-    private void Update() {
-        if (restart) {
-            if (Input.GetKeyDown(KeyCode.R)) {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-        }
-    }
+    //private void Update() {
+    //    if (restart) {
+    //        if (Input.GetKeyDown(KeyCode.R)) {
+    //            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    //        }
+    //    }
+    //}
 
     IEnumerator SpawnWaves() {
         yield return new WaitForSeconds(startWait);
@@ -45,7 +47,8 @@ public class GameController : MonoBehaviour {
             }
             yield return new WaitForSeconds(waveWait);
             if (gameOver) {
-                restartText.text = "Press 'R' for Restart";
+                restartButton.SetActive(true);
+                //restartText.text = "Press 'R' for Restart";
                 restart = true;
                 break;
             }
@@ -64,5 +67,9 @@ public class GameController : MonoBehaviour {
     public void GameOver() {
         gameOverText.text = "Game Over";
         gameOver = true;
+    }
+
+    public void RestartGame() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
