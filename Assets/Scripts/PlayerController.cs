@@ -20,10 +20,12 @@ public class PlayerController : MonoBehaviour {
     private AudioSource audiosource;
     private float nextFire = 0.5F;
     private float myTime = 0.0F;
+    private Quaternion calibrationQuarternion;
 
     private void Start() {
         rb = GetComponent<Rigidbody>();
         audiosource = GetComponent<AudioSource>();
+        CalibrateAccelerometer();
     }
 
     private void Update() {
@@ -36,14 +38,27 @@ public class PlayerController : MonoBehaviour {
             myTime = 0.0F;
             audiosource.Play();
         }
-        
+    }
+
+    void CalibrateAccelerometer() {
+        Vector3 accelerationSnapshot = Input.acceleration;
+        Quaternion rotateQuaternion = Quaternion.FromToRotation(new Vector3(0.0f, 0.0f, -1.0f), accelerationSnapshot);
+        calibrationQuarternion = Quaternion.Inverse(rotateQuaternion);
+    }
+
+    Vector3 FixAcceleration(Vector3 acceleration) {
+        Vector3 fixedAcceleration = calibrationQuarternion * acceleration;
+        return fixedAcceleration;
     }
 
     private void FixedUpdate() {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        //float moveHorizontal = Input.GetAxis("Horizontal");
+        //float moveVertical = Input.GetAxis("Vertical");
 
-        Vector3 movement  = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        //Vector3 movement  = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        Vector3 accelerationRaw = Input.acceleration;
+        Vector3 acceleration = FixAcceleration(accelerationRaw);
+        Vector3 movement = new Vector3(acceleration.x, 0.0f, acceleration.y);
         rb.velocity = movement * speed;
 
         rb.position = new Vector3(
@@ -54,4 +69,6 @@ public class PlayerController : MonoBehaviour {
 
         rb.rotation = Quaternion.Euler(0.0f, 0.0f, -rb.velocity.x * tilt);
     }
+
+    
 }
