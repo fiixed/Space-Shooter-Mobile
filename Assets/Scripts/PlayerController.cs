@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour {
     public Boundary boundary;
     public GameObject shot;
     public Transform shotSpawn;
+    public SimpleTouchPad touchPad;
 
     private Rigidbody rb;
     private AudioSource audiosource;
@@ -56,9 +57,10 @@ public class PlayerController : MonoBehaviour {
         //float moveVertical = Input.GetAxis("Vertical");
 
         //Vector3 movement  = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        Vector2 direction = touchPad.GetDirection();
         Vector3 accelerationRaw = Input.acceleration;
         Vector3 acceleration = FixAcceleration(accelerationRaw);
-        Vector3 movement = new Vector3(acceleration.x, 0.0f, acceleration.y);
+        Vector3 movement = new Vector3(direction.x, 0.0f, direction.y);
         rb.velocity = movement * speed;
 
         rb.position = new Vector3(
